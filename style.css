@@ -10,6 +10,10 @@ html, body {
   font-family: "Montserrat", sans-serif;
 }
 
+/* body {
+  overflow: hidden;
+} */
+
 h1,
 section,
 p,
@@ -62,23 +66,117 @@ svg {
   height: 100%;
 }
 
+.hidden {
+  display: none;
+}
+
+/* Preloader */
+
+.preloader {
+  background-color: var(--color-background-light);
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  opacity: 1;
+  z-index: 999999;
+}
+
+.preloader-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: 6px;
+  background-color: var(--color-pink-light);
+  animation: load 1s ease-in-out infinite;
+}
+
+@keyframes load {
+  0% {
+    transform: translateY(0)
+  }
+
+  50% {
+    transform: translateY(-12px)
+  }
+
+  40% {
+    transform: translateY(0)
+  }
+}
+
+
 /* Page -------------------------------------------------------------- */
 
 .page {
+  position: absolute;
   z-index: 9999;
   width: 100%;
   height: 100vh;
-  /* overflow: hidden; */
+  overflow: hidden;
 }
 
 .page-wrapper {
   position: relative;
 }
 
+/* Preloader */
+
+.animatedis {
+  display: inline-block;
+  transform: translateY(100%);
+}
+
+.intro-text {
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: var(--color-text);
+  font-weight: 500;
+  font-size: 24px;
+  transform: translate(-50%, -50%);
+
+}
+
+.arrow-svg-wrapper {
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  opacity: 0;
+  color: var(--color-text);
+  transform: translate(-50%, -50%);
+  animation: bounce 0.5s ease-in alternate infinite;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateY(0)
+  }
+  
+  100% {
+    transform: translateY(8px)
+  }
+}
+
 /* Toggle Bar */
 .toggle-bar {
   position: fixed;
   display: flex;
+  opacity: 0;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -132,16 +230,27 @@ svg {
 
 /* Section Formatting --------------- */
 .section-margin {
-  height: 3000px;
+  height: 500px;
   width: 100%;
 }
 
 .section {
   position: relative;
   width: 50%;
-  padding: 1000px 4%;
+  padding: 200px 4%;
   margin: 0;
   background-color: var(--color-background);
+  opacity: 60%;
+  overflow: hidden;
+}
+
+.section-contact {
+  position: relative;
+  width: 50%;
+  padding: 200px 4%;
+  margin: 0;
+  background-color: var(--color-background);
+  opacity: 60%;
   overflow: hidden;
 }
 
@@ -188,9 +297,9 @@ svg {
 
 .section-intro-wrapper {
   position: relative;
-  padding: 20% 5%;
+  
   border-bottom: 2px solid var(--color-pink);
-  padding-bottom: 400px;
+  /* padding-bottom: 400px; */
 }
 
 .section-detail-wrapper {
@@ -224,39 +333,11 @@ svg {
   font-size: 40px;
   font-weight: 500;
   transform-origin: left;
-  transform: skewY(25deg);
   z-index: 5;
   text-transform: uppercase;
   color: var(--color-pink);
 }
 
-.styleOne, 
-.styleTwo, 
-.styleThree {
-  position: absolute;
-  display: block;
-  width: 100%;
-  max-width: 278px;
-  height: 60px;
-  border: 1px solid var(--color-pink);
-  transform-origin: left;
-  transform: skewY(-25deg);
-}
-
-
-.styleOne {
-  top: 0px;
-}
-
-.styleTwo {
-  top: 80px;
-}
-
-.styleThree {
-  top: 80px;
-  transform: skewY(25deg);
-  background-color: var(--color-pink);
-}
 
 .section-number {
   position: absolute;
@@ -265,6 +346,7 @@ svg {
   color: var(--color-pink);
   font-size: 24px;
 }
+
 
 
 /* Hero Section */
@@ -312,6 +394,46 @@ svg {
   color: var(--color-text);
 }
 
+/* Project Section */
+
+.example-btn {
+  background: #3498db;
+  background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+  background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+  background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+  background-image: -o-linear-gradient(top, #3498db, #2980b9);
+  background-image: linear-gradient(to bottom, #3498db, #2980b9);
+  -webkit-border-radius: 28;
+  -moz-border-radius: 28;
+  border-radius: 28px;
+  -webkit-box-shadow: 1px 1px 20px #666666;
+  -moz-box-shadow: 1px 1px 20px #666666;
+  box-shadow: 1px 1px 20px #666666;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  margin: 20px 5px;
+  padding: 10px 20px 10px 20px;
+  border: solid #1f628d 1px;
+
+  cursor: pointer;
+  color: inherit;
+}
+
+.example-btn a {
+  text-decoration: none;
+}
+
+.example-btn:hover {
+  background: #3cb0fd;
+  background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+  text-decoration: none;
+}
+
 /* Other colors override */
 
 .blue-text {
@@ -349,5 +471,24 @@ svg {
   .progress-bar-wrapper-left {
     right: 0;
     left: auto;
+  }
+
+  .hero-main{
+    bottom: 120px;
+  }
+  .hero-second{
+    top: 160px;
+  }
+  .hero-wrapper{
+    width: calc(100% - 60px);
+  }
+  .hero-main-title{
+    font-size: 32px;
+  }
+  .hero-main-description{
+    font-size: 18px;
+  }
+  .hero-second-subheading{
+    font-size: 18px;
   }
 }

@@ -1,7 +1,6 @@
 import Experience from "../Experience"
 import * as THREE from "three"
 import GSAP from "gsap";
-import { RectAreaLightHelper } from "three/examples/jsm/helpers/RectAreaLightHelper"
 
 export default class Room {
     constructor() {
@@ -10,9 +9,15 @@ export default class Room {
 
         this.resources = this.experience.resources;
         this.time = this.experience.time;
-        this.room = this.resources.items.room;
-        this.actualRoom = this.room.scene
-        
+
+        this.pictureFrame = this.resources.items.pictureFrame.scene;
+
+        this.screenOne = this.resources.items.screen.scene;
+       
+        console.log(this.resources.items.screen)
+        console.log(this.pictureFrame)
+        console.log(this.actualRoom);
+       
         this.lerp = {
             current: 0,
             target: 0,
@@ -26,10 +31,8 @@ export default class Room {
     
     setModel() {
         this.actualRoom.rotation.y = Math.PI;
-        this.actualRoom.children.forEach(child => {
-            child.castShadow = true;
-            child.receiveShadow = true;
 
+        this.pictureFrame.children.forEach(child => {
             if(child instanceof THREE.Group) {
                 child.children.forEach((groupchild) => {
                     groupchild.castShadow = true;
@@ -37,7 +40,7 @@ export default class Room {
                 })
             }
 
-            if(child.name === "Hologram") {
+            if(child.name === "Picture_Frame") {
                 child.material = new THREE.MeshPhysicalMaterial();
                 child.material.roughness = 0;
                 child.material.color.set(0xffffff);
@@ -46,56 +49,69 @@ export default class Room {
                 child.materialopacity = 3;
             }
 
-            if(child.name === "ArcadeScreen") {
-                child.material = new THREE.MeshBasicMaterial({
-                    map: this.resources.items.arcadeScreen,
-                    side: THREE.DoubleSide,
-                })
-
-                 // Flip the texture vertically
-                child.material.map.wrapS = THREE.RepeatWrapping;
-                child.material.map.wrapT = THREE.RepeatWrapping;
-                child.material.map.repeat.y = -1; // Flip the texture vertically
-
-            }
-
-            if(child.name === "MonitorScreen") {
-                child.material = new THREE.MeshBasicMaterial({
-                    map: this.resources.items.computerScreen,
-                    side: THREE.DoubleSide,
-                })
-            }
-
-            // if(child.name === "Desk") {
-            //     child.scale.set(0, 0, 0)
-            // }
+            child.scale.set(1, 1, 1);
+            child.position.set(0, 0, 0)
         })
 
 
-        // Rect light on the hologram
-        const width = 0.3;
-        const height = 1;
-        const intensity = 1;
-        const rectLight = new THREE.RectAreaLight( 0xffffff, intensity,  width, height );
-        rectLight.position.set( -0.04, 3,  0.11029338836669922 );
-        rectLight.rotation.x = -Math.PI / 2;
-        rectLight.rotation.z = -Math.PI / 4;
+        document.querySelector(".tinysquares").addEventListener("click", () => {
+            this.changeMap(this.resources.items.arcadeScreen);
+          });
+      
+          document.querySelector(".nomad-nebula").addEventListener("click", () => {
+            this.changeMap(this.resources.items.computerScreen);
+          });
+
+
+        this.screenOne.position.z = 3;
+        this.screenOne.scale.set(0, 0, 0);
+        this.scene.add(this.screenOne);
+
+        this.pictureFrame.position.z = 3;
+        this.pictureFrame.scale.set(1, 1, 1)
+        this.scene.add(this.pictureFrame);
+
   
-        this.actualRoom.add( rectLight )
-
-        // const rectLightHelper = new RectAreaLightHelper( rectLight );
-        // rectLight.add( rectLightHelper );
-
-        this.scene.add(this.actualRoom);
-        this.actualRoom.scale.set(0.33, 0.33, 0.33);
     }
 
+    changeMap(newMap) {
+        
+        this.screenOne.children.forEach((child) => {
+          if (child.name === "MonitorScreen") {
+            child.material = new THREE.MeshPhysicalMaterial({
+              map: newMap,
+              side: THREE.DoubleSide,
+            });
+            child.material.map.wrapS = THREE.RepeatWrapping;
+            child.material.map.wrapT = THREE.RepeatWrapping;
+            child.material.map.repeat.y = -1; // Flip the texture vertically
+          }
+    
+          child.scale.set(1, 1, 1);
+          child.position.set(0, 0, 0);
+        });
+    }
     
 
     setAnimation() {
         this.mixer = new THREE.AnimationMixer(this.actualRoom);
         this.fly = this.mixer.clipAction(this.room.animations[57]);
         this.fly.play();
+
+        this.pictureFrame.rotation.x = -0.1;
+
+        const animatePicture = () => {
+            const rotationIncrementX = Math.random() * 0.002; // Adjust the value as needed
+            const rotationIncrementY = Math.random() * 0.01; // Adjust the value as needed
+            const rotationIncrementZ = Math.random() * 0.002; // Adjust the value as needed
+    
+            // this.pictureFrame.rotation.x += rotationIncrementX;
+            this.pictureFrame.rotation.y += rotationIncrementY;
+            // this.pictureFrame.rotation.z += rotationIncrementZ;
+            requestAnimationFrame(animatePicture);
+        }
+
+        animatePicture();
     }
 
     onMouseMove() {
@@ -104,7 +120,7 @@ export default class Room {
             this.rotation = ((e.clientX - window.innerWidth / 2) * 2) / window.innerWidth;
 
             // Rotation of room on mouse move
-            this.lerp.target = this.rotation * 0.1;
+            this.lerp.target = this.rotation * 0.5;
             
         })
     }
@@ -122,7 +138,8 @@ export default class Room {
         );
 
         this.actualRoom.rotation.y = this.lerp.current;
-
+        // this.pictureFrame.rotation.y = this.lerp.current * 4;
+        this.screenOne.rotation.y = this.lerp.current;
 
         this.mixer.update(this.time.delta * 0.0001);
     }

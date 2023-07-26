@@ -9,7 +9,7 @@ export default class Resources extends EventEmitter {
         super();
         this.Experience = new Experience();
         this.renderer = this.Experience.renderer
-
+        this.scene = this.Experience.scene
         this.assets = assets;
         this.items = {};
         this.queue = this.assets.length;
@@ -23,15 +23,19 @@ export default class Resources extends EventEmitter {
         this.loaders = {};
         this.loaders.gltfLoader = new GLTFLoader();
         this.loaders.dracoLoader = new DRACOLoader();
+        this.loaders.textureLoader = new THREE.TextureLoader();
         this.loaders.dracoLoader.setDecoderPath("/draco/");
         this.loaders.gltfLoader.setDRACOLoader(this.loaders.dracoLoader);
+       
     }
 
     startLoading() {
         for (const asset of this.assets) {
+       
             if(asset.type === "glbModel") {
                 this.loaders.gltfLoader.load(asset.path, (file) => {
                     this.singleAssetLoaded(asset, file);
+                    console.log(file)
                 })
             } else if (asset.type === "videoTexture"){
                 this.video = {};
@@ -54,7 +58,41 @@ export default class Resources extends EventEmitter {
                 this.videoTexture[asset.name].encoding = THREE.SRGBColorSpace;
 
                 this.singleAssetLoaded(asset,  this.videoTexture[asset.name]);
-               
+
+                
+            } else if(asset.type === "nebulajpg") {
+                this.planes = [];
+                this.nebulajpg = {};
+
+                // Load textures and create planes
+                for (let i = 1; i <= 4; i++) {
+                this.geometry = new THREE.PlaneGeometry(20, 20);
+                this.texture = this.loaders.textureLoader.load(`./images/nebula${i}.jpg`);
+                this.material = new THREE.MeshBasicMaterial({ map: this.texture, transparent: true, opacity: 0.4, side: THREE.DoubleSide });
+                this.plane = new THREE.Mesh(this.geometry, this.material);
+                this.planes.push(this.plane);
+                this.nebulajpg[`nebula${i}`] = this.texture;
+                }
+
+                this.singleAssetLoaded(asset, this.planes);
+              
+
+
+            } else if (asset.type === "planettexture") {
+                this.texture = this.loaders.textureLoader.load(`./textures/planetTexture.jpg`);
+
+                this.texturedMaterial = new THREE.MeshStandardMaterial({
+                    color: 0xffffff,
+                    metalness: 0.1,
+                    roughness: 0.2,
+                    normalMap: this.texture,
+                    emissive: 0x9152cc
+                  })
+
+                  this.bigSphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+                  this.bigSphere = new THREE.Mesh(this.bigSphereGeometry, this.texturedMaterial);
+
+                  this.singleAssetLoaded(asset, this.bigSphere);
             }
         }
     }

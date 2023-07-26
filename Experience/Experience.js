@@ -6,6 +6,7 @@ import Renderer from "./Renderer"
 import Time from "./Utils/Time"
 import Resources from "./Utils/Resources"
 import assets from "./Utils/assets"
+import Preloader from "./Preloader"
 
 import Controls from "./World/Controls.js";
 import World from "./World/World"
@@ -20,6 +21,7 @@ export default class Experience {
         Experience.instance = this
         this.canvas = canvas;
         this.scene = new THREE.Scene();
+
         this.sizes = new Sizes();
         this.time = new Time();
         this.camera = new Camera();
@@ -27,6 +29,11 @@ export default class Experience {
         this.resources = new Resources(assets);
         this.theme = new Theme();
         this.world = new World();
+        this.preloader = new Preloader();
+
+        this.preloader.on("enablecontrols", () => {
+            this.controls = new Controls();
+        })
 
         this.sizes.on("resize", () => {
             this.resize();
@@ -44,6 +51,7 @@ export default class Experience {
     }
 
     update() {
+        this.preloader.update
         this.camera.update();
         this.world.update();
         this.renderer.update();

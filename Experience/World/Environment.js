@@ -1,6 +1,5 @@
 import Experience from "../Experience"
 import * as THREE from "three"
-import Room from "./Room"
 import GSAP from "gsap";
 import GUI from "lil-gui";
 
