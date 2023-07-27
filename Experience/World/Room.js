@@ -15,8 +15,7 @@ export default class Room {
         this.screenOne = this.resources.items.screen.scene;
        
         console.log(this.resources.items.screen)
-        console.log(this.pictureFrame)
-        console.log(this.actualRoom);
+ 
        
         this.lerp = {
             current: 0,
@@ -30,7 +29,7 @@ export default class Room {
     }
     
     setModel() {
-        this.actualRoom.rotation.y = Math.PI;
+
 
         this.pictureFrame.children.forEach(child => {
             if(child instanceof THREE.Group) {
@@ -94,9 +93,9 @@ export default class Room {
     
 
     setAnimation() {
-        this.mixer = new THREE.AnimationMixer(this.actualRoom);
-        this.fly = this.mixer.clipAction(this.room.animations[57]);
-        this.fly.play();
+        // this.mixer = new THREE.AnimationMixer(this.actualRoom);
+        // this.fly = this.mixer.clipAction(this.room.animations[57]);
+        // this.fly.play();
 
         this.pictureFrame.rotation.x = -0.1;
 
@@ -137,11 +136,11 @@ export default class Room {
             this.lerp.ease
         );
 
-        this.actualRoom.rotation.y = this.lerp.current;
+        // this.actualRoom.rotation.y = this.lerp.current;
         // this.pictureFrame.rotation.y = this.lerp.current * 4;
         this.screenOne.rotation.y = this.lerp.current;
 
-        this.mixer.update(this.time.delta * 0.0001);
+        // this.mixer.update(this.time.delta * 0.0001);
     }
 
 }
