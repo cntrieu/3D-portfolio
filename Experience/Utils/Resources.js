@@ -60,21 +60,23 @@ export default class Resources extends EventEmitter {
                 this.singleAssetLoaded(asset,  this.videoTexture[asset.name]);
 
                 
-            } else if(asset.type === "nebulajpg") {
-                this.planes = [];
-                this.nebulajpg = {};
+            } 
+            else if(asset.type === "nebulajpg") {
 
-                // Load textures and create planes
-                for (let i = 1; i <= 4; i++) {
+
                 this.geometry = new THREE.PlaneGeometry(20, 20);
-                this.texture = this.loaders.textureLoader.load(`./images/nebula${i}.jpg`);
-                this.material = new THREE.MeshBasicMaterial({ map: this.texture, transparent: true, opacity: 0.4, side: THREE.DoubleSide });
-                this.plane = new THREE.Mesh(this.geometry, this.material);
-                this.planes.push(this.plane);
-                this.nebulajpg[`nebula${i}`] = this.texture;
-                }
+                this.texture = this.loaders.textureLoader.load(`./images/nebulacombo1.jpg`);
+                this.material = new THREE.MeshStandardMaterial({ 
+                    map: this.texture, 
+                    transparent: true, 
+                    opacity: 0.8, 
+                    side: THREE.DoubleSide,
+                    roughness: 0.7,
 
-                this.singleAssetLoaded(asset, this.planes);
+                });
+                this.plane = new THREE.Mesh(this.geometry, this.material);
+
+                this.singleAssetLoaded(asset, this.plane);
               
 
 

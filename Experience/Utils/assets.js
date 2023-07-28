@@ -40,6 +40,11 @@ export default [
         path: "/images/nebula4.jpg"
     },
     {
+        name: "nebulacombo",
+        type: "nebulajpg",
+        path: "/images/nebulacombo.jpg"
+    },
+    {
         name: "planettexture",
         type: "planettexture",
         path: "/textures/planetTexture.jpg"

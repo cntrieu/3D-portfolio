@@ -6,7 +6,7 @@ import Planet from "./Planet"
 import Environment from "./Environment"
 import Controls from "./Controls"
 import Room from "./Room"
-import Floor from "./Floor";
+
 import Stars from "./Stars";
 import { EventEmitter } from "events";
 
@@ -24,7 +24,7 @@ export default class World extends EventEmitter {
 
         this.resources.on("ready", () => {
             this.environment = new Environment();
-            this.floor = new Floor();
+     
             this.planet = new Planet();
             this.nebula = new Nebula();
             this.stars = new Stars();
@@ -34,9 +34,6 @@ export default class World extends EventEmitter {
     
         })
 
-        this.theme.on("switch", (theme) => {
-            this.switchTheme(theme);
-        });
     }
 
     switchTheme(theme) {

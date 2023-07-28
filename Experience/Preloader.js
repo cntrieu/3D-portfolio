@@ -2,6 +2,7 @@ import { EventEmitter } from "events";
 import Experience from "./Experience"
 import GASP from "gsap";
 import convert from "./Utils/convertDivstoSpans"
+import createSendEmailObject from './Utils/email.js';
 
 export default class Preloader extends EventEmitter {
     constructor() {
@@ -15,6 +16,16 @@ export default class Preloader extends EventEmitter {
         this.world = this.experience.world;
         this.device = this.sizes.device;
 
+        this.sendEmailObj = createSendEmailObject();
+        this.handleFormSubmission = this.handleFormSubmission.bind(this);
+
+
+        // Form element for contact
+        this.formElement = document.querySelector('form'); 
+        if (this.formElement) {
+            this.formElement.addEventListener('submit', this.handleFormSubmission);
+        }
+
         this.sizes.on("switchdevice", (device) => {
             this.device = device;
         })
@@ -24,16 +35,51 @@ export default class Preloader extends EventEmitter {
         })
     }
 
+    handleFormSubmission(e) {
+        e.preventDefault();
+        const nameInput = e.target.querySelector('input[name="user_name"]');
+        const emailInput = e.target.querySelector('input[name="user_email"]');
+        const messageInput = e.target.querySelector('textarea[name="message"]');
+      
+        if (!nameInput.value || !emailInput.value || !messageInput.value) {
+          this.showErrorMessage();
+        } else {
+          this.sendEmailObj.methods.sendEmail(e.target);
+          this.resetFormFields();
+        }
+      }
+
+      showErrorMessage() {
+        // Show an error message indicating input fields are missing
+        const contactBlank = document.querySelector('.contact-blank');
+      
+        contactBlank.textContent = '*Please fill out all the required fields!';
+        contactBlank.classList.remove('hidden');
+      
+        // Hide the error message after a few seconds
+        setTimeout(() => {
+            contactBlank.classList.add('hidden');
+        }, 5000);
+      }
+
+      resetFormFields() {
+        const inputElements = this.formElement.querySelectorAll('input:not([type="submit"])');
+        const textareaElement = this.formElement.querySelector('textarea');
+      
+        // Clear the input values
+        inputElements.forEach((input) => {
+          input.value = '';
+        });
+        // Clear the textarea value
+        textareaElement.value = '';
+      }
+
     setAssets() {
         // convert(document.querySelector(".intro-text"))
         convert(document.querySelector(".hero-main-title"))
         convert(document.querySelector(".hero-main-description"))
         convert(document.querySelector(".hero-second-subheading"))
         convert(document.querySelector(".second-sub"))
-
-        // this.room = this.experience.world.room.actualRoom;
-        // this.roomChildren = this.experience.world.room.roomChildren;
-        // console.log(this.roomChildren);
     }
 
     firstIntro() {
@@ -49,41 +95,13 @@ export default class Preloader extends EventEmitter {
                 }
             })
 
-            // if(this.device === "desktop") {
-            //     this.timeline.to(this.roomChildren.room.scale, {
-            //         x: 0.5,
-            //         y: 0.5,
-            //         z: 0.5,
-            //         ease: "back",
-            //         duration: 0.7,
-            //     }).to(this.room.position, {
-            //         x: -1,
-            //         ease: "power1.out",
-            //         duration: 0.7,
-               
-            //     })
-            // } else {
-            //     this.timeline.to(this.roomChildren.room.scale, {
-            //         x: 0.5,
-            //         y: 0.5,
-            //         z: 0.5,
-            //         ease: "back",
-            //         duration: 0.7,
-            //     }).to(this.room.position, {
-            //         z: -1,
-            //         ease: "power1.out",
-            //         duration: 0.7,
-                   
-            //     })
-            // }
-
             this.timeline
             .to(".intro-text .animatedis", {
                 yPercent: 0,
                 stagger: 0.07,
-                ease: "back.out(1.2)",
+                ease: "back.out(0.6)",
                 onComplete: resolve,
-            }).to(".arrow-svg-wrapper", {
+            }, "same").to(".arrow-svg-wrapper", {
                 opacity: 1
             }, "same").to(".toggle-bar", {
                 opacity: 1,
@@ -120,78 +138,7 @@ export default class Preloader extends EventEmitter {
             this.secondTimeline.to(".arrow-svg-wrapper", {
                 opacity: 0,
             }, "fadeout")
-            // .to(
-            //     this.room.position,
-            //     {
-            //         x: 0,
-            //         y: 0,
-            //         z: 0,
-            //         ease: "power1.out",
-            //     },
-            //     "same"
-            // )
-            // .to(
-            //     this.roomChildren.room.rotation,
-            //     {
-            //         y: 2 * Math.PI + Math.PI / 4,
-            //     },
-            //     "same"
-            // )
-            // .to(
-            //     this.roomChildren.room.scale,
-            //     {
-            //         x: 3,
-            //         y: 3,
-            //         z: 3,
-            //     },
-            //     "same"
-            // )
-            // .to(
-            //     this.camera.orthographicCamera.position,
-            //     {
-            //         y: 2.5,
-            //     },
-            //     "same"
-            // )
-            // .to(
-            //     this.roomChildren.room.position,
-            //     {
-            //         x: 0,
-            //         y: 0,
-            //         z: 0,
-            //     },
-            //     "same"
-            // )
-            // .set(this.roomChildren.body.scale, {
-            //     x: 1,
-            //     y: 1,
-            //     z: 1,
-            // })
-            // .to(
-            //     this.roomChildren.room.scale,
-            //     {
-            //         x: 1,
-            //         y: 1,
-            //         z: 1,
-            //         duration: 1,
-            //     },
-            //     "introtext"
-            // )
-
-            .to(".arrow-svg-wrapper", {
-                opacity: 1,
-                onComplete: resolve
-            })
-
-            // if(this.device === "desktop") {
-            //     this.secondTimeline.to(this.room.position, {
-            //         x: 0,
-            //         y: 0,
-            //         z: 0,
-            //         ease: "power1.out",
-            //         onComplete: resolve,
-            //     })
-            // } 
+         
             }
         )}
 

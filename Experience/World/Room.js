@@ -6,16 +6,10 @@ export default class Room {
     constructor() {
         this.experience = new Experience();
         this.scene = this.experience.scene
-
         this.resources = this.experience.resources;
         this.time = this.experience.time;
-
         this.pictureFrame = this.resources.items.pictureFrame.scene;
-
         this.screenOne = this.resources.items.screen.scene;
-       
-        console.log(this.resources.items.screen)
- 
        
         this.lerp = {
             current: 0,
@@ -93,16 +87,13 @@ export default class Room {
     
 
     setAnimation() {
-        // this.mixer = new THREE.AnimationMixer(this.actualRoom);
-        // this.fly = this.mixer.clipAction(this.room.animations[57]);
-        // this.fly.play();
 
         this.pictureFrame.rotation.x = -0.1;
 
         const animatePicture = () => {
-            const rotationIncrementX = Math.random() * 0.002; // Adjust the value as needed
-            const rotationIncrementY = Math.random() * 0.01; // Adjust the value as needed
-            const rotationIncrementZ = Math.random() * 0.002; // Adjust the value as needed
+            const rotationIncrementX = Math.random() * 0.002; 
+            const rotationIncrementY = Math.random() * 0.01; 
+            const rotationIncrementZ = Math.random() * 0.002; 
     
             // this.pictureFrame.rotation.x += rotationIncrementX;
             this.pictureFrame.rotation.y += rotationIncrementY;
@@ -136,8 +127,6 @@ export default class Room {
             this.lerp.ease
         );
 
-        // this.actualRoom.rotation.y = this.lerp.current;
-        // this.pictureFrame.rotation.y = this.lerp.current * 4;
         this.screenOne.rotation.y = this.lerp.current;
 
         // this.mixer.update(this.time.delta * 0.0001);

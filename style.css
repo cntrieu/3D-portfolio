@@ -24,35 +24,18 @@ svg {
 
 :root {
 
-  /* Light Theme Variables */
-  --color-text-light: rgb(54, 53, 53);
-  --color-background-light: #FFE79B;
-  --color-pink-light: #DD58D6;
-  --color-green-light: #7AD0AC;
-  --color-blue-light: #8395CD;
+  --color-text-default: #FFE79B;
+  --color-background-default: #8395CD;
 
-  /* Dark Theme Variables */
-  --color-text-dark: #FFE79B;
-  --color-background-dark: #8395CD;
 }
 
 .light-theme {
-  --color-text: var(--color-text-light);
-  --color-background: var(--color-background-light);
-  --color-pink: var(--color-pink-light);
-  --color-green: var(--color-green-light);
-  --color-blue: var(--color-blue-light);
+  --color-text: var(--color-text-default);
+  --color-background: var(--color-background-default);
+  --color-pink: var(--color-text-default);
+  --color-green: var(--color-text-default);
+  --color-blue: var(--color-text-default);
 }
-
-.dark-theme {
-  --color-text: var(--color-text-dark);
-  --color-background: var(--color-background-dark);
-  --color-pink: var(--color-text-dark);
-  --color-green: var(--color-text-dark);
-  --color-blue: var(--color-text-dark);
-}
-
-
 
 /* Experience -------------------------------------------------------- */
 .experience {
@@ -70,10 +53,14 @@ svg {
   display: none;
 }
 
+.hidden-visibility {
+  visibility: hidden;
+}
+
 /* Preloader */
 
 .preloader {
-  background-color: var(--color-background-light);
+  background-color: var(--color-background-default);
   width: 100%;
   height: 100vh;
   position: fixed;
@@ -100,7 +87,7 @@ svg {
   height: 10px;
   border-radius: 50%;
   margin: 6px;
-  background-color: var(--color-pink-light);
+  background-color: var(--color-text-default);
   animation: load 1s ease-in-out infinite;
 }
 
@@ -228,9 +215,84 @@ svg {
   left: 28px;
 }
 
+  /* Center the form */
+  form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  /* Style for labels */
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  /* Style for inputs and textarea */
+  input[type="text"],
+  input[type="email"],
+  textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+    font-family: inherit;
+  }
+
+  input[type="message"],
+  textarea {
+    height: 200px;
+    resize: vertical; 
+  }
+
+  /* Style for submit button */
+  input[type="submit"] {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  /* Optional: Hover effect for the submit button */
+  input[type="submit"]:hover {
+    background-color: #3cb0fd;
+  }
+
+  .contact-list {
+    list-style-type: disc;
+    margin-left: 20px;
+  }
+  
+  .contact-list li {
+    margin-bottom: 10px;
+  }
+  
+  .contact-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; 
+  }
+
+  .contact-blank {
+    margin: 5px;
+    color: rgb(187, 8, 8);
+  }
+
+  .thank-you-message {
+    margin-top: 20px;
+    color: var(--color-text-default);
+  }
+
 /* Section Formatting --------------- */
 .section-margin {
-  height: 500px;
+  height: 300px;
   width: 100%;
 }
 
@@ -240,7 +302,7 @@ svg {
   padding: 200px 4%;
   margin: 0;
   background-color: var(--color-background);
-  opacity: 60%;
+  opacity: 75%;
   overflow: hidden;
 }
 
@@ -304,7 +366,7 @@ svg {
 
 .section-detail-wrapper {
   position: relative;
-  padding: 20% 5%;
+  padding: 15% 5%;
 }
 
 .section-heading {
@@ -346,7 +408,6 @@ svg {
   color: var(--color-pink);
   font-size: 24px;
 }
-
 
 
 /* Hero Section */

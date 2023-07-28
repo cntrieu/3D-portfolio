@@ -10,7 +10,6 @@ import Preloader from "./Preloader"
 
 import Controls from "./World/Controls.js";
 import World from "./World/World"
-import Theme from "./Theme"
 
 export default class Experience {
     static instance
@@ -27,7 +26,6 @@ export default class Experience {
         this.camera = new Camera();
         this.renderer = new Renderer();
         this.resources = new Resources(assets);
-        this.theme = new Theme();
         this.world = new World();
         this.preloader = new Preloader();
 
