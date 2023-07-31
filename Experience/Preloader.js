@@ -19,6 +19,14 @@ export default class Preloader extends EventEmitter {
         this.sendEmailObj = createSendEmailObject();
         this.handleFormSubmission = this.handleFormSubmission.bind(this);
 
+        
+        this.sizes.on("switchdevice", (device) => {
+            this.device = device;
+        })
+        this.world.on("worldready", () => {
+            this.setAssets();
+            this.firstIntro();
+        })
 
         // Form element for contact
         this.formElement = document.querySelector('form'); 
@@ -26,13 +34,6 @@ export default class Preloader extends EventEmitter {
             this.formElement.addEventListener('submit', this.handleFormSubmission);
         }
 
-        this.sizes.on("switchdevice", (device) => {
-            this.device = device;
-        })
-        this.world.on("worldready", () => {
-            this.setAssets();
-            this.playIntro();
-        })
     }
 
     handleFormSubmission(e) {
@@ -84,7 +85,7 @@ export default class Preloader extends EventEmitter {
 
     firstIntro() {
         return new Promise ((resolve) => {
-            // Making the room on page load enlarge animation and ease to the left
+            
             this.timeline = new GASP.timeline();
             this.timeline.set(".animatedis", {y: 0, yPercent: 100})
             this.timeline.to("preloader", {
@@ -128,66 +129,10 @@ export default class Preloader extends EventEmitter {
                 ease: "back.out(0.6)",
              
             })
+
         })
     }
 
-    secondIntro() {
-        return new Promise ((resolve) => {
-            this.secondTimeline = new GASP.timeline();
-
-            this.secondTimeline.to(".arrow-svg-wrapper", {
-                opacity: 0,
-            }, "fadeout")
-         
-            }
-        )}
-
-    onScroll(e) {
-        if(e.deltaY > 0) {
-            this.removeEventListeners();
-            this.secondIntro();
-        }
-    }
-
-    onTouch(e) {
-        this.initialY = e.touches[0].clientY;
-    }
-
-    onTouchMove(e) {
-        let currentY = e.touches[0].clientY;
-        let difference = this.initialY - currentY;
-        if(difference > 0) {
-            console.log("swiped up");
-            this.removeEventListeners();
-            this.playSecondIntro();
-        }
-        this.initialY = null;
-    }
-
-    removeEventListeners() {
-        window.removeEventListener("wheel", this.scrollOnceEvent);
-        window.removeEventListener("touchStart", this.touchStart);
-        window.removeEventListener("touchMove", this.touchMove);
-    }
-
-    async playIntro() {
-        this.scaleFlag = true;
-        await this.firstIntro();
-        this.moveFlag = true;
-        this.scrollOnceEvent = this.onScroll.bind(this)
-        this.touchStart = this.onTouch.bind(this)
-        this.touchMove = this.onTouchMove.bind(this)
-        window.addEventListener("wheel",  this.scrollOnceEvent);
-        window.addEventListener("touchStart", this.touchStart);
-        window.addEventListener("touchMove", this.touchMove);
-    }
-
-    async playSecondIntro() {
-        this.moveFlag = false;
-        await this.secondIntro()
-        this.scaleFlag = false;
-        this.emit("enablecontrols")
-    }
 
     move() {
         // if(this.device === "desktop") {
@@ -210,7 +155,7 @@ export default class Preloader extends EventEmitter {
 
     update() {
         if(this.moveFlag) {
-            this.move
+            this.move();
         }
 
         if (this.scaleFlag) {
