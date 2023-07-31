@@ -31,6 +31,8 @@ export default class Controls {
         
         GSAP.registerPlugin(ScrollTrigger);
 
+        document.querySelector(".page").style.overflow = "visible";
+
 
         this.setSmoothScroll();
         this.setScrollTrigger();
@@ -83,10 +85,6 @@ export default class Controls {
     
     // Scrolling animation for the room
     setScrollTrigger() {
-
-        const onResolutionChange = () => {
-            ScrollTrigger.refresh();
-          };
 
         let mm = GSAP.matchMedia();
         // desktop setup code here...
@@ -174,8 +172,6 @@ export default class Controls {
             z: 0
         }, "same")
 
-        onResolutionChange();
-
         }
         
         );
@@ -184,6 +180,7 @@ export default class Controls {
 
          // MOBILE SETUP
         mm.add("(max-width: 968px)", () => {
+            console.log("fired mobile")
 
             // First section----------------------
           this.firstMoveTimeline = new GSAP.timeline({
@@ -224,7 +221,7 @@ export default class Controls {
             }
         })
        
-        onResolutionChange();
+  
 
         });
 
